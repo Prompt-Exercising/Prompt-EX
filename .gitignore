@@ -98,13 +98,13 @@ celerybeat-schedule.*
 *.sage.py
 
 # Environments
-# .env
-# .venv
-# env/
-# venv/
-# ENV/
-# env.bak/
-# venv.bak/
+ .env
+ .venv
+ env/
+ venv/
+ ENV/
+ env.bak/
+ venv.bak/
 
 # mkdocs documentation
 /site
@@ -137,5 +137,4 @@ GitHub.sublime-settings
 !.vscode/extensions.json
 .history
 
-data/db/
-.env
+data/db/.env
