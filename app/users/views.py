@@ -1,19 +1,22 @@
 import logging
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.utils import timezone
-from rest_framework import serializers, status
+from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from users.models import User
-from users.serializers import UserSerializer
+from users.serializers import UserInfoSerializer, UserSerializer
 
 logger = logging.getLogger(__name__)
 
 
 class SignUpView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if not serializer.is_valid():
@@ -27,6 +30,8 @@ class SignUpView(APIView):
 
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request: Request) -> Response:
         email = request.data.get("email")
         password = request.data.get("password")
@@ -64,7 +69,11 @@ class LogoutView(APIView):
 
 
 class UserView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         user = request.user
-        serializer = UserSerializer(user)
+        if user is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = UserInfoSerializer(user)
         return Response(serializer.data)
