@@ -17,13 +17,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run lint and checks
-        run: |
-          docker compose -f docker-compose-dev.yml run --rm app sh -c "ruff check --no-cache && ruff format --no-cache"
-
       - name: Inject .env file
         run: |
           echo "${{ secrets.ENV_DEV }}" > .env
+
+      - name: Run lint and checks
+        run: |
+          docker compose -f docker-compose-dev.yml run --rm app sh -c "ruff check --no-cache && ruff format --no-cache"
 
       - name: Run Pytest
         run: docker compose -f docker-compose-dev.yml run --rm app sh -c "pytest"
