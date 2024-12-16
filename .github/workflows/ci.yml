@@ -1,0 +1,27 @@
+
+name: Docker CI
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Inject .env file
+        run: |
+          echo "${{ secrets.ENV_DEV }}" > .env
+
+      - name: Run lint and checks
+        run: |
+          docker compose -f docker-compose-dev.yml run --rm app sh -c "ruff check --no-cache && ruff format --no-cache"
+

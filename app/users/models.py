@@ -33,7 +33,6 @@ class User(AbstractBaseUser, CommonModel):
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["email"]
 
     objects = UserManager()
 
