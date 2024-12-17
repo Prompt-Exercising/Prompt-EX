@@ -5,19 +5,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('fitplans', '0005_alter_fitplan_chest_alter_fitplan_thigh_and_more'),
+        ("fitplans", "0005_alter_fitplan_chest_alter_fitplan_thigh_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='fitplan',
-            name='goal',
+            model_name="fitplan",
+            name="goal",
         ),
         migrations.AddField(
-            model_name='fitplan',
-            name='goal',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='fitplans.goal'),
+            model_name="fitplan",
+            name="goal",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="fitplans.goal",
+            ),
         ),
     ]

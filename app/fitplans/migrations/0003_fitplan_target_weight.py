@@ -5,15 +5,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('fitplans', '0002_fitplan_delete_size'),
+        ("fitplans", "0002_fitplan_delete_size"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='fitplan',
-            name='target_weight',
-            field=models.FloatField(default=0.0, help_text='목표 체중 (단위: kg)', validators=[django.core.validators.MinValueValidator(0)]),
+            model_name="fitplan",
+            name="target_weight",
+            field=models.FloatField(
+                default=0.0,
+                help_text="목표 체중 (단위: kg)",
+                validators=[django.core.validators.MinValueValidator(0)],
+            ),
         ),
     ]

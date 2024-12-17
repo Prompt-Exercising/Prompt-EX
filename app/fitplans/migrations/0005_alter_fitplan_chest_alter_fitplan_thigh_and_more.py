@@ -5,25 +5,33 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('fitplans', '0004_goal_remove_fitplan_goal_fitplan_goal'),
+        ("fitplans", "0004_goal_remove_fitplan_goal_fitplan_goal"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='fitplan',
-            name='chest',
-            field=models.FloatField(help_text='단위: 인치', validators=[django.core.validators.MinValueValidator(0)]),
+            model_name="fitplan",
+            name="chest",
+            field=models.FloatField(
+                help_text="단위: 인치",
+                validators=[django.core.validators.MinValueValidator(0)],
+            ),
         ),
         migrations.AlterField(
-            model_name='fitplan',
-            name='thigh',
-            field=models.FloatField(help_text='단위: 인치', validators=[django.core.validators.MinValueValidator(0)]),
+            model_name="fitplan",
+            name="thigh",
+            field=models.FloatField(
+                help_text="단위: 인치",
+                validators=[django.core.validators.MinValueValidator(0)],
+            ),
         ),
         migrations.AlterField(
-            model_name='fitplan',
-            name='waist',
-            field=models.FloatField(help_text='단위: 인치', validators=[django.core.validators.MinValueValidator(0)]),
+            model_name="fitplan",
+            name="waist",
+            field=models.FloatField(
+                help_text="단위: 인치",
+                validators=[django.core.validators.MinValueValidator(0)],
+            ),
         ),
     ]

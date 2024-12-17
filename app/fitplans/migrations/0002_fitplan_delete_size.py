@@ -5,31 +5,76 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('fitplans', '0001_initial'),
+        ("fitplans", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Fitplan',
+            name="Fitplan",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('date', models.DateField(auto_now_add=True)),
-                ('weight', models.FloatField(help_text='단위: kg', validators=[django.core.validators.MinValueValidator(0)])),
-                ('chest', models.FloatField(help_text='단위: cm', validators=[django.core.validators.MinValueValidator(0)])),
-                ('waist', models.FloatField(help_text='단위: cm', validators=[django.core.validators.MinValueValidator(0)])),
-                ('thigh', models.FloatField(help_text='단위: cm', validators=[django.core.validators.MinValueValidator(0)])),
-                ('goal', models.CharField(choices=[('LOSE', '체중 감량'), ('GAIN', '체중 증가'), ('MAINTAIN', '체중 유지'), ('MUSCLE', '근육 증가')], max_length=100)),
-                ('period', models.PositiveIntegerField(help_text='목표 달성 기간 (일)')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("date", models.DateField(auto_now_add=True)),
+                (
+                    "weight",
+                    models.FloatField(
+                        help_text="단위: kg",
+                        validators=[django.core.validators.MinValueValidator(0)],
+                    ),
+                ),
+                (
+                    "chest",
+                    models.FloatField(
+                        help_text="단위: cm",
+                        validators=[django.core.validators.MinValueValidator(0)],
+                    ),
+                ),
+                (
+                    "waist",
+                    models.FloatField(
+                        help_text="단위: cm",
+                        validators=[django.core.validators.MinValueValidator(0)],
+                    ),
+                ),
+                (
+                    "thigh",
+                    models.FloatField(
+                        help_text="단위: cm",
+                        validators=[django.core.validators.MinValueValidator(0)],
+                    ),
+                ),
+                (
+                    "goal",
+                    models.CharField(
+                        choices=[
+                            ("LOSE", "체중 감량"),
+                            ("GAIN", "체중 증가"),
+                            ("MAINTAIN", "체중 유지"),
+                            ("MUSCLE", "근육 증가"),
+                        ],
+                        max_length=100,
+                    ),
+                ),
+                (
+                    "period",
+                    models.PositiveIntegerField(help_text="목표 달성 기간 (일)"),
+                ),
             ],
             options={
-                'ordering': ['-date'],
+                "ordering": ["-date"],
             },
         ),
         migrations.DeleteModel(
-            name='Size',
+            name="Size",
         ),
     ]

@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import FitplanPostView, FitplanListView
 
+from .views import FitplanListView, FitplanPostView
 
 urlpatterns = [
     path("", FitplanListView.as_view(), name="fitplan_list"),

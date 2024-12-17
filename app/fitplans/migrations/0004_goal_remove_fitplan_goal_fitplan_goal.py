@@ -4,26 +4,33 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('fitplans', '0003_fitplan_target_weight'),
+        ("fitplans", "0003_fitplan_target_weight"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Goal',
+            name="Goal",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('goal', models.CharField(max_length=100)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("goal", models.CharField(max_length=100)),
             ],
         ),
         migrations.RemoveField(
-            model_name='fitplan',
-            name='goal',
+            model_name="fitplan",
+            name="goal",
         ),
         migrations.AddField(
-            model_name='fitplan',
-            name='goal',
-            field=models.ManyToManyField(blank=True, to='fitplans.goal'),
+            model_name="fitplan",
+            name="goal",
+            field=models.ManyToManyField(blank=True, to="fitplans.goal"),
         ),
     ]
