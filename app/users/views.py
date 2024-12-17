@@ -1,7 +1,3 @@
-import logging
-
-from django.contrib.auth import login, logout
-from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
@@ -12,8 +8,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from users.models import User
 from users.serializers import UserInfoSerializer, UserSerializer
 from users.services.token_service import create_jwt_response
-
-logger = logging.getLogger(__name__)
 
 
 class SignUpView(APIView):
@@ -65,7 +59,7 @@ class LogoutView(APIView):
         refresh_token = request.COOKIES.get("refresh_token")
 
         if refresh_token:
-            token = RefreshToken(refresh_token)  # type: ignore
+            token = RefreshToken(refresh_token)
             token.blacklist()
 
         response = Response(
