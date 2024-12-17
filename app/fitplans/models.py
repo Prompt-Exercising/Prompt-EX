@@ -10,7 +10,7 @@ class Goal(models.Model):
         return self.goal
 
 class Fitplan(CommonModel):
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     weight = models.FloatField(validators=[MinValueValidator(0)], help_text="단위: kg")
     target_weight = models.FloatField(validators=[MinValueValidator(0)], default=0.0, help_text="목표 체중 (단위: kg)")

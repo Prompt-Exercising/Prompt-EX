@@ -6,5 +6,5 @@ class FitPlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Fitplan
-        fields = ['id', 'date', 'weight', 'target_weight', 'goal', 'chest', 'waist', 'thigh', 'period']
+        fields = ['id', 'date', 'weight','user', 'target_weight', 'goal', 'chest', 'waist', 'thigh', 'period']
         read_only_fields = ['id', 'date']

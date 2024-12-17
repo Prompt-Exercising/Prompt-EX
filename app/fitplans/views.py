@@ -6,12 +6,16 @@ from .models import Fitplan
 from .serializers import FitPlanSerializer
 
 
-
 class FitplanPostView(APIView):
      def post(self, request):
-        serializer = FitPlanSerializer(data=request.data)
+        user = request.user
+
+        data = request.data.copy()
+        data["user"] = user.id
+
+        serializer = FitPlanSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=user)
             response_data = {
                 "status": "success",
                 "message": "Event created successfully",
