@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from .models import Fitplan
 from .serializers import FitPlanSerializer
-
+from .services import generate_fitness_plan
 
 class FitplanPostView(APIView):
     def post(self, request):
@@ -16,12 +16,25 @@ class FitplanPostView(APIView):
 
         serializer = FitPlanSerializer(data=data)
         if serializer.is_valid():
-            serializer.save(user=user)
+
+            fitplan = serializer.save(user=user)
+
+            user_data = {
+                "weight": fitplan.weight,
+                "target_weight": fitplan.target_weight,
+                "chest": fitplan.chest,
+                "waist": fitplan.waist,
+                "thigh": fitplan.thigh,
+                "period": fitplan.period,
+            }
+            ai_result = generate_fitness_plan(user_data)
             response_data = {
                 "status": "success",
-                "message": "Event created successfully",
+                "message": "운동 계획 생성 완료",
                 "data": serializer.data,
+                "fitness_plan": ai_result,
             }
+
             return Response(response_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
