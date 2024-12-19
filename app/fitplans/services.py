@@ -1,7 +1,9 @@
-import openai
 import os
 
-openai.api_key = os.environ.get('OPENAI_API_KEY')
+import openai
+
+openai.api_key = os.environ.get("OPENAI_API_KEY")
+
 
 def generate_fitness_plan(user_data):
     prompt = (
@@ -41,13 +43,14 @@ def generate_fitness_plan(user_data):
     except Exception as e:
         return f"AI 요청 중 오류가 발생했습니다: {e}"
 
+
 user_data = {
     "weight": 75.5,
     "target_weight": 70.0,
     "chest": 37.0,
     "waist": 32.0,
     "thigh": 21.5,
-    "period": 30
+    "period": 30,
 }
 
 print(generate_fitness_plan(user_data))
