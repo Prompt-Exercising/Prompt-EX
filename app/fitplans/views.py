@@ -7,6 +7,7 @@ from .models import Fitplan
 from .serializers import FitPlanSerializer
 from .services import generate_fitness_plan
 
+
 class FitplanPostView(APIView):
     def post(self, request):
         user = request.user
@@ -16,7 +17,6 @@ class FitplanPostView(APIView):
 
         serializer = FitPlanSerializer(data=data)
         if serializer.is_valid():
-
             fitplan = serializer.save(user=user)
 
             user_data = {
