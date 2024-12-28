@@ -44,13 +44,13 @@ def generate_fitness_plan(user_data):
         return f"AI 요청 중 오류가 발생했습니다: {e}"
 
 
-user_data = {
-    "weight": 75.5,
-    "target_weight": 70.0,
-    "chest": 37.0,
-    "waist": 32.0,
-    "thigh": 21.5,
-    "period": 30,
-}
+# test_data = {
+#     "weight": 75.5,
+#     "target_weight": 70.0,
+#     "chest": 37.0,
+#     "waist": 32.0,
+#     "thigh": 21.5,
+#     "period": 30,
+# }
 
-print(generate_fitness_plan(user_data))
+# print(generate_fitness_plan(test_data))
