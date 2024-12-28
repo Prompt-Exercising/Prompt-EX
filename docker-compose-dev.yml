@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       args:
         - DEV=true
-    command: sh ./scripts/start-deploy.sh
+    command: sh ./scripts/start-dev.sh
     volumes:
       - ./app:/app
     ports:
