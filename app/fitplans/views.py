@@ -2,8 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Fitplan
-from .serializers import FitPlanSerializer
+from .models import Community, Fitplan
+from .serializers import CommunitySerializer, FitPlanSerializer
 from .services.openai_service import generate_fitness_plan
 
 
@@ -70,5 +70,98 @@ class FitplanListView(APIView):
         except Fitplan.DoesNotExist:
             return Response(
                 {"status": "error", "message": "Fitplan not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+
+class CommunityListView(APIView):
+    def get(self, request):
+        communities = Community.objects.all()
+        serializer = CommunitySerializer(communities, many=True)
+        response_data = {
+            "status": "success",
+            "message": "Community fetched successfully",
+            "data": serializer.data,
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
+
+
+class CommunityPostView(APIView):
+    def post(self, request):
+        user = request.user
+        data = request.data.copy()
+        data["user"] = user.id
+
+        serializer = CommunitySerializer(data=data)
+        if serializer.is_valid():
+            serializer.save(user=user)
+            return Response(
+                {"status": "success", "message": "Community created successfully"},
+                status=status.HTTP_201_CREATED,
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommunityDetailView(APIView):
+    def get(self, request, community_id):
+        try:
+            community = Community.objects.get(user=request.user, id=community_id)
+            serializer = CommunitySerializer(community)
+            return Response(
+                {
+                    "status": "success",
+                    "message": "Community fetched successfully",
+                    "data": serializer.data,
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Community.DoesNotExist:
+            return Response(
+                {"status": "error", "message": "Community not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+    def patch(self, request, community_id):
+        try:
+            community = Community.objects.get(user=request.user, id=community_id)
+        except Community.DoesNotExist:
+            return Response(
+                {"status": "error", "message": "Community not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = CommunitySerializer(community, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {
+                    "status": "success",
+                    "message": "Community updated successfully",
+                    "data": serializer.data,
+                },
+                status=status.HTTP_200_OK,
+            )
+        return Response(
+            {"status": "error", "message": "Invalid data", "errors": serializer.errors},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class CommunityDeleteView(APIView):
+    def delete(self, request, community_id):
+        try:
+            community = Community.objects.get(user=request.user, id=community_id)
+            community_title = community.title
+            community.delete()
+            return Response(
+                {
+                    "status": "success",
+                    "message": f"Community with id {community_title} deleted successfully",
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Community.DoesNotExist:
+            return Response(
+                {"status": "error", "message": "Community not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )

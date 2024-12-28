@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Fitplan
+from .models import Community, Fitplan
 
 
 class FitPlanSerializer(serializers.ModelSerializer):
@@ -21,3 +21,10 @@ class FitPlanSerializer(serializers.ModelSerializer):
             "period",
         ]
         read_only_fields = ["id", "date"]
+
+
+class CommunitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Community
+        fields = ["id", "title", "description", "user"]
+        read_only_fields = ["id", "user"]
