@@ -1,10 +1,10 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from services.openai_service import generate_fitness_plan
 
 from .models import Fitplan
 from .serializers import FitPlanSerializer
+from .services.openai_service import generate_fitness_plan
 
 
 class FitplanPostView(APIView):
