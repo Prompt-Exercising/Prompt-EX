@@ -1,4 +1,5 @@
 import json
+
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth import get_user_model
@@ -22,11 +23,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @sync_to_async
     def get_or_create_room(self, room_name):
         from .models import ChatRoom  # 지연 임포트
+
         ChatRoom.objects.get_or_create(name=room_name)
-    
+
     @sync_to_async
     def save_message(self, room_name, user, content):
         from .models import ChatRoom, Message  # 지연 임포트
+
         room = ChatRoom.objects.get(name=room_name)
         User = get_user_model()
         user_instance = User.objects.get(email=user.email)
@@ -63,4 +66,3 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
-
