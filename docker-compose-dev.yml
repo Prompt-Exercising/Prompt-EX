@@ -18,7 +18,6 @@ services:
       - DB_PASS=${DB_PW}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=6379
-      - DJANGO_SETTINGS_MODULE=config.settings
     env_file:
       - .env
     depends_on:
