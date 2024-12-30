@@ -24,6 +24,7 @@ OWN_APPS = [
     "users",
     "common",
     "fitplans",
+    "chat",
 ]
 
 THIRD_APPS = [
@@ -31,6 +32,7 @@ THIRD_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
+    "channels",
 ]
 
 
@@ -80,6 +82,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+
+ASGI_APPLICATION = "config.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
 
 DATABASES = {
     "default": {
