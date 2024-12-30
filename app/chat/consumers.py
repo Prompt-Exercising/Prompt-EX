@@ -11,8 +11,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         from .models import ChatRoom
 
+        # URL에서 토큰을 추출
         token = self.scope["query_string"].decode().split("=")[1]
         try:
+            # JWT 디코딩
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
             user_id = payload["user_id"]
             self.scope["user"] = await self.get_user(user_id)
