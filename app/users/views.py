@@ -1,15 +1,19 @@
-from rest_framework import status
+from drf_spectacular.utils import (
+    OpenApiParameter,
+    OpenApiResponse,
+    extend_schema,
+    inline_serializer,
+)
+from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from drf_spectacular.utils import extend_schema, inline_serializer, OpenApiResponse, OpenApiParameter
+
 from users.models import User
 from users.serializers import UserInfoSerializer, UserSerializer
 from users.services.token_service import create_jwt_response
-from rest_framework import serializers
-
 
 
 class SignUpView(APIView):
@@ -25,7 +29,6 @@ class SignUpView(APIView):
             400: OpenApiResponse(description="회원가입 실패"),
         },
     )
-
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if not serializer.is_valid():
@@ -65,7 +68,6 @@ class LoginView(APIView):
             401: OpenApiResponse(description="Unauthorized or inactive user"),
         },
     )
-
     def post(self, request: Request) -> Response:
         email = request.data.get("email")
         password = request.data.get("password")
@@ -127,7 +129,6 @@ class UserView(APIView):
             404: OpenApiParameter("detail", "string", description="User not found"),
         },
     )
-
     def get(self, request):
         user = request.user
         if user is None:

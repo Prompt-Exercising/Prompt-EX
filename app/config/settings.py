@@ -33,7 +33,7 @@ THIRD_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     "channels",
-    'drf_spectacular',
+    "drf_spectacular",
 ]
 
 
@@ -62,7 +62,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 ROOT_URLCONF = "config.urls"
@@ -150,8 +150,8 @@ SIMPLE_JWT = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Prompt-Exercising API',
-    'DESCRIPTION': 'API documentation for my project.',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
+    "TITLE": "Prompt-Exercising API",
+    "DESCRIPTION": "API documentation for my project.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }

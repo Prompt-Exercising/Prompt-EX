@@ -1,7 +1,8 @@
 from django.http import JsonResponse
-from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiParameter
+from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema
 
 from .models import Message
+
 
 @extend_schema(
     methods=["GET"],
@@ -16,8 +17,16 @@ from .models import Message
             examples=[
                 {
                     "messages": [
-                        {"user__name": "User1", "content": "Hello!", "timestamp": "2025-01-01T00:00:00Z"},
-                        {"user__name": "User2", "content": "Hi there!", "timestamp": "2025-01-01T01:00:00Z"},
+                        {
+                            "user__name": "User1",
+                            "content": "Hello!",
+                            "timestamp": "2025-01-01T00:00:00Z",
+                        },
+                        {
+                            "user__name": "User2",
+                            "content": "Hi there!",
+                            "timestamp": "2025-01-01T01:00:00Z",
+                        },
                     ]
                 }
             ],
@@ -25,8 +34,6 @@ from .models import Message
         404: OpenApiResponse(description="방을 찾을 수 없음"),
     },
 )
-
-
 def get_messages(request, room_name):
     messages = Message.objects.filter(room__name=room_name).order_by("-timestamp")[:50]
     return JsonResponse(
