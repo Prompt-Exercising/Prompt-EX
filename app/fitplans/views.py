@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
 
 from .models import Community, Fitplan
 from .serializers import CommunitySerializer, FitPlanSerializer
@@ -8,6 +9,16 @@ from .services.openai_service import generate_fitness_plan
 
 
 class FitplanPostView(APIView):
+    @extend_schema(
+        methods=["POST"],
+        summary="운동 계획 생성",
+        description="사용자의 데이터를 바탕으로 운동 계획을 생성합니다.",
+        request=FitPlanSerializer,
+        responses={
+            201: FitPlanSerializer,
+            400: OpenApiResponse(description="운동 계획 생성 실패"),
+        },
+    )
     def post(self, request):
         user = request.user
 
@@ -39,6 +50,15 @@ class FitplanPostView(APIView):
 
 
 class FitplanListView(APIView):
+    @extend_schema(
+        methods=["GET"],
+        summary="운동 계획 리스트",
+        description="모든 운동 계획을 조회합니다.",
+        responses={
+            200: FitPlanSerializer(many=True),
+            400: OpenApiResponse(description="운동 계획 리스트 조회 실패"),
+        },
+    )
     def get(self, request):
         fitplans = Fitplan.objects.all()
         serializer = FitPlanSerializer(fitplans, many=True)
@@ -48,6 +68,17 @@ class FitplanListView(APIView):
             "data": serializer.data,
         }
         return Response(response_data, status=status.HTTP_200_OK)
+    
+    @extend_schema(
+        methods=["DELETE"],
+        summary="운동 계획 삭제",
+        description="운동 계획을 ID로 삭제합니다.",
+        responses={
+            200: OpenApiResponse(description="운동 계획 삭제 성공"),
+            400: OpenApiResponse(description="운동 계획 삭제 실패"),
+            404: OpenApiResponse(description="운동 계획을 찾을 수 없음"),
+        },
+    )
 
     def delete(self, request):
         fitplan_id = request.data.get("id")
@@ -75,6 +106,15 @@ class FitplanListView(APIView):
 
 
 class CommunityListView(APIView):
+    @extend_schema(
+        methods=["GET"],
+        summary="커뮤니티 리스트",
+        description="모든 커뮤니티를 조회합니다.",
+        responses={
+            200: CommunitySerializer(many=True),
+            400: OpenApiResponse(description="커뮤니티 리스트 조회 실패"),
+        },
+    )
     def get(self, request):
         communities = Community.objects.all()
         serializer = CommunitySerializer(communities, many=True)
@@ -87,6 +127,16 @@ class CommunityListView(APIView):
 
 
 class CommunityPostView(APIView):
+    @extend_schema(
+        methods=["POST"],
+        summary="커뮤니티 생성",
+        description="새로운 커뮤니티를 생성합니다.",
+        request=CommunitySerializer,
+        responses={
+            201: CommunitySerializer,
+            400: OpenApiResponse(description="커뮤니티 생성 실패"),
+        },
+    )
     def post(self, request):
         user = request.user
         data = request.data.copy()
@@ -103,6 +153,18 @@ class CommunityPostView(APIView):
 
 
 class CommunityDetailView(APIView):
+    @extend_schema(
+        methods=["GET"],
+        summary="커뮤니티 상세",
+        description="특정 커뮤니티의 상세 정보를 조회합니다.",
+        parameters=[
+            OpenApiParameter("community_id", int, description="커뮤니티 ID", required=True, location=OpenApiParameter.PATH)
+        ],
+        responses={
+            200: CommunitySerializer,
+            404: OpenApiResponse(description="커뮤니티를 찾을 수 없음"),
+        },
+    )
     def get(self, request, community_id):
         try:
             community = Community.objects.get(user=request.user, id=community_id)
@@ -120,6 +182,20 @@ class CommunityDetailView(APIView):
                 {"status": "error", "message": "Community not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+    
+    @extend_schema(
+        methods=["PATCH"],
+        summary="커뮤니티 업데이트",
+        description="커뮤니티 정보를 업데이트합니다.",
+        parameters=[
+            OpenApiParameter("community_id", int, description="커뮤니티 ID", required=True, location=OpenApiParameter.PATH)
+        ],
+        request=CommunitySerializer,
+        responses={
+            200: CommunitySerializer,
+            400: OpenApiResponse(description="커뮤니티 업데이트 실패"),
+        },
+    )
 
     def patch(self, request, community_id):
         try:
@@ -148,6 +224,18 @@ class CommunityDetailView(APIView):
 
 
 class CommunityDeleteView(APIView):
+    @extend_schema(
+        methods=["DELETE"],
+        summary="커뮤니티 삭제",
+        description="커뮤니티를 ID로 삭제합니다.",
+        parameters=[
+            OpenApiParameter("community_id", int, description="커뮤니티 ID", required=True, location=OpenApiParameter.PATH)
+        ],
+        responses={
+            200: OpenApiResponse(description="커뮤니티 삭제 성공"),
+            404: OpenApiResponse(description="커뮤니티를 찾을 수 없음"),
+        },
+    )
     def delete(self, request, community_id):
         try:
             community = Community.objects.get(user=request.user, id=community_id)

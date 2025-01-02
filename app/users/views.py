@@ -4,14 +4,27 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from drf_spectacular.utils import extend_schema, inline_serializer, OpenApiResponse, OpenApiParameter
 from users.models import User
 from users.serializers import UserInfoSerializer, UserSerializer
 from users.services.token_service import create_jwt_response
+from rest_framework import serializers
+
 
 
 class SignUpView(APIView):
     permission_classes = [AllowAny]
+
+    @extend_schema(
+        methods=["POST"],
+        summary="일반 회원가입",
+        description="이메일, 이름, 비밀번호 사용한 회원가입입니다.",
+        request=UserSerializer,
+        responses={
+            201: UserSerializer,
+            400: OpenApiResponse(description="회원가입 실패"),
+        },
+    )
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -27,6 +40,31 @@ class SignUpView(APIView):
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
+
+    @extend_schema(
+        methods=["POST"],
+        summary="일반 로그인",
+        description="로그인을 시도해주세요",
+        request=inline_serializer(
+            name="UserLoginRequest",
+            fields={
+                "email": serializers.EmailField(help_text="User's email address"),
+                "password": serializers.CharField(help_text="User's password"),
+            },
+        ),
+        responses={
+            200: inline_serializer(
+                name="UserLoginResponse",
+                fields={
+                    "id": serializers.IntegerField(),
+                    "name": serializers.CharField(),
+                    "email": serializers.EmailField(),
+                },
+            ),
+            400: OpenApiResponse(description="Invalid credentials"),
+            401: OpenApiResponse(description="Unauthorized or inactive user"),
+        },
+    )
 
     def post(self, request: Request) -> Response:
         email = request.data.get("email")
@@ -55,6 +93,14 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+    @extend_schema(
+        methods=["POST"],
+        summary="로그아웃",
+        description="로그아웃 요청 시 JWT 쿠키 삭제됩니다.",
+        responses={
+            200: OpenApiResponse(description="Logout success message"),
+        },
+    )
     def post(self, request: Request) -> Response:
         refresh_token = request.COOKIES.get("refresh_token")
 
@@ -74,6 +120,13 @@ class LogoutView(APIView):
 
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        responses={
+            200: UserInfoSerializer,
+            404: OpenApiParameter("detail", "string", description="User not found"),
+        },
+    )
 
     def get(self, request):
         user = request.user
