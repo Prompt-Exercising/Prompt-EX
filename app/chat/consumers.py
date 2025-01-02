@@ -1,13 +1,34 @@
 import json
 
+import jwt
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.conf import settings
 from django.contrib.auth import get_user_model
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         from .models import ChatRoom
+
+        # URL에서 토큰을 추출
+        token = self.scope["query_string"].decode().split("=")[1]
+        try:
+            # JWT 디코딩
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            user_id = payload["user_id"]
+            self.scope["user"] = await self.get_user(user_id)
+        except jwt.ExpiredSignatureError:
+            await self.close()
+            return
+        except jwt.InvalidTokenError:
+            await self.close()
+            return
+
+        # 인증 실패 시 연결 거부 (NEW)
+        if self.scope["user"].is_anonymous:
+            await self.close()
+            return
 
         # WebSocket URL에서 room_name을 가져옴
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
@@ -19,6 +40,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         # WebSocket 연결 수락
         await self.accept()
+
+    @sync_to_async
+    def get_user(self, user_id):
+        User = get_user_model()
+        try:
+            return User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return None
 
     @sync_to_async
     def get_or_create_room(self, room_name):
@@ -52,7 +81,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 "type": "chat_message",
                 "message": message_content,
-                "user": self.scope["user"].username,
+                "user": self.scope["user"].email,
             },
         )
 
