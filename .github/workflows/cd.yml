@@ -40,7 +40,7 @@ jobs:
       env:
         GCP_USER: baggiung
       run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/GCP_id_rsa ${GCP_USER}@${{ secrets.GCP_INSTANCE_IP }} "
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/GCP_id_rsa ${GCP_USER}@${{ secrets.GCP_INSTANCE_IP }} "ㅊ
           cd /home/baggiung/Prompt-EX &&
           git pull origin main &&
           docker-compose down || true &&
