@@ -1,0 +1,55 @@
+name: Docker CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
+
+    - name: Authenticate to GCP
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+    - name: Set up Google Cloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        export_default_credentials: true
+
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.GCP_SSH_PRIVATE_KEY }}" > ~/.ssh/GCP_id_rsa
+        chmod 600 ~/.ssh/GCP_id_rsa
+
+
+    - name: Install Docker & Docker Compose on GCP Instance
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/GCP_id_rsa ${GCP_USER}@${{ secrets.GCP_INSTANCE_IP }} "
+          sudo apt-get update &&
+          sudo apt-get install -y docker.io docker-compose
+        "
+
+    - name: Deploy application
+      env:
+        GCP_USER: baggiung
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/GCP_id_rsa ${GCP_USER}@${{ secrets.GCP_INSTANCE_IP }} "
+          cd /home/baggiung/Prompt-EX &&
+          git pull origin main &&
+          docker-compose down || true &&
+          docker-compose up --build -d &&
+        "
