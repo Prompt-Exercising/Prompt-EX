@@ -43,6 +43,6 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/GCP_id_rsa ${GCP_USER}@${{ secrets.GCP_INSTANCE_IP }} "
           cd /home/baggiung/Prompt-EX &&
           git pull origin main &&
-          docker-compose down || true &&
-          docker-compose up --build -d
+          sudo docker-compose down || true &&
+          sudo docker-compose up --build -d
         "
