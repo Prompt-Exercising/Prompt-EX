@@ -42,7 +42,9 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/GCP_id_rsa ${GCP_USER}@${{ secrets.GCP_INSTANCE_IP }} "
           sudo apt-get update &&
-          sudo apt-get install -y docker.io docker-compose &&
+          sudo apt-get install -y docker.io &&
+          sudo curl -L \"https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-\$(uname -s)-\$(uname -m)\" -o /usr/local/bin/docker-compose &&
+          sudo chmod +x /usr/local/bin/docker-compose &&
           cd /home/baggiung/Prompt-EX &&
           git pull origin main &&
           docker compose down || true &&
