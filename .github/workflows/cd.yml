@@ -47,6 +47,6 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose &&
           cd /home/baggiung/Prompt-EX &&
           git pull origin main &&
-          docker compose down || true &&
-          docker compose up --build -d
+          docker-compose down || true &&
+          docker-compose up --build -d
         "
