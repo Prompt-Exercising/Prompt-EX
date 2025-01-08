@@ -16,23 +16,14 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PW}
+      - DB_PORT=${DB_PORT}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     env_file:
       - .env
     depends_on:
       - redis
-  
-  cloud-sql-proxy:
-    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy
-    command:
-      - "--address=0.0.0.0"
-      - "--port=5432"
-      - "studied-limiter-447112-i8:asia-northeast3:promptex-database"
-    volumes:
-      - ~/.config/gcloud:/config
-    ports:
-      - "5432:5432"
+
 
   redis:
     image: redis:alpine
