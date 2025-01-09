@@ -30,5 +30,17 @@ services:
     volumes:
       - redis_data:/data
 
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./app/staticfiles:/app/staticfiles
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+
 volumes:
   redis_data:

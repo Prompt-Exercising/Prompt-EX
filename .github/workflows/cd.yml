@@ -36,10 +36,18 @@ jobs:
         chmod 600 ~/.ssh/GCP_id_rsa
 
 
+    - name: Prepare nginx.conf with server_name
+      run: |
+        export SERVER_NAME=${{ secrets.SERVER_NAME }}
+        envsubst '${SERVER_NAME}' < ./nginx/nginx.conf.template > ./nginx/nginx.conf
+
+
     - name: Install Docker & Docker Compose and Deploy Application on GCP Instance
       env:
         GCP_USER: baggiung
       run: |
+        scp -o StrictHostKeyChecking=no -i ~/.ssh/GCP_id_rsa ./nginx/nginx.conf ${GCP_USER}@${{ secrets.GCP_INSTANCE_IP }}:/home/baggiung/Prompt-EX/nginx/nginx.conf
+
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/GCP_id_rsa ${GCP_USER}@${{ secrets.GCP_INSTANCE_IP }} "
           cd /home/baggiung/Prompt-EX &&
           git pull origin main &&
