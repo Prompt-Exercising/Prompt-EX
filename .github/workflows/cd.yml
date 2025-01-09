@@ -39,7 +39,7 @@ jobs:
     - name: Prepare nginx.conf with server_name
       run: |
         export SERVER_NAME=${{ secrets.SERVER_NAME }}
-        envsubst '${SERVER_NAME}' < ./nginx/nginx.conf.template > ./nginx/nginx.conf
+        envsubst '${SERVER_NAME}' < ./nginx/nginx.conf > ./nginx/nginx.conf
 
 
     - name: Install Docker & Docker Compose and Deploy Application on GCP Instance
