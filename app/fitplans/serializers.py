@@ -20,7 +20,7 @@ class FitPlanSerializer(serializers.ModelSerializer):
             "thigh",
             "period",
         ]
-        read_only_fields = ["id", "date"]
+        read_only_fields = ["id", "date", "user"]
 
 
 class CommunitySerializer(serializers.ModelSerializer):

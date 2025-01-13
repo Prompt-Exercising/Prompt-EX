@@ -14,7 +14,7 @@ services:
     environment:
       - DB_HOST=db
       - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
+      - DB_USER=${DB_DEV_USER}
       - DB_PASS=${DB_PW}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -28,7 +28,7 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
+      POSTGRES_USER: ${DB_DEV_USER}
       POSTGRES_PASSWORD: ${DB_PW}
     volumes:
       - postgres_data:/var/lib/postgresql/data
