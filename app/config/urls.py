@@ -6,6 +6,9 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("v1/users/", include("users.urls")),
@@ -22,4 +25,4 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),  # Redoc UI
-]
+]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
