@@ -5,36 +5,50 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='ChatRoom',
+            name="ChatRoom",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(max_length=255, unique=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("name", models.CharField(max_length=255, unique=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Message',
+            name="Message",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('content', models.TextField()),
-                ('timestamp', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("content", models.TextField()),
+                ("timestamp", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]
