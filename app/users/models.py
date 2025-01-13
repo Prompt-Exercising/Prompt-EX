@@ -1,9 +1,12 @@
+import uuid
+
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
 )
 from django.db import models
+from django.utils import timezone
 
 from common.models import CommonModel
 
@@ -43,3 +46,13 @@ class User(AbstractBaseUser, CommonModel, PermissionsMixin):
 
     def __str__(self) -> str:
         return f"name: {self.name}"
+
+
+class EmailVerification(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    verified_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Verification for {self.user.email}"

@@ -1,3 +1,11 @@
+import os
+
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.utils.timezone import now
 from drf_spectacular.utils import (
     OpenApiParameter,
     OpenApiResponse,
@@ -5,6 +13,7 @@ from drf_spectacular.utils import (
     inline_serializer,
 )
 from rest_framework import serializers, status
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -14,6 +23,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from users.models import User
 from users.serializers import UserInfoSerializer, UserSerializer
 from users.services.token_service import create_jwt_response
+
+from .models import EmailVerification
 
 
 class SignUpView(APIView):
@@ -34,11 +45,71 @@ class SignUpView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         try:
-            serializer.save()
+            user = serializer.save(is_active=False)
+            email_verification = EmailVerification.objects.create(user=user)
+            current_site = get_current_site(request)
+            mail_subject = "이메일 인증을 완료하세요."
+            # TODO 민수님과 얘기 나눠보기
+            message_html = render_to_string(
+                "emails/activation_email.html",
+                {
+                    "user": user,
+                    "domain": current_site.domain,
+                    "token": email_verification.token,
+                },
+            )
+
+            message_text = strip_tags(message_html)
+
+            email = EmailMessage(
+                subject=mail_subject,
+                body=message_text,
+                from_email=os.getenv("EMAIL_HOST_USER"),
+                to=[user.email],
+            )
+            email.content_subtype = "html"
+            email.body = message_html
+
+            email.send()
+
             response = Response(serializer.data, status=status.HTTP_201_CREATED)
             return response
         except Exception as e:
             print(f"Error: {e}")
+            return Response(
+                {"detail": "회원가입 실패"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+@extend_schema(
+    methods=["GET"],
+    summary="이메일 인증",
+    description="이메일 인증을 완료합니다. 해당 URL을 클릭하면 인증이 완료되고 사용자가 활성화됩니다.",
+    responses={
+        200: OpenApiResponse(description="이메일 인증이 완료되었습니다."),
+        400: OpenApiResponse(description="잘못된 토큰입니다."),
+    },
+)
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def activate_email(request, token):
+    try:
+        verification = EmailVerification.objects.get(token=token)
+    except ObjectDoesNotExist:
+        return Response({"detail": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if verification.verified_at:
+        return Response({"detail": "이미 인증되었습니다."}, status=status.HTTP_200_OK)
+
+    verification.verified_at = now()
+    verification.save()
+
+    verification.user.is_active = True
+    verification.user.save()
+
+    return Response(
+        {"detail": "이메일 인증이 완료되었습니다."}, status=status.HTTP_200_OK
+    )
 
 
 class LoginView(APIView):
