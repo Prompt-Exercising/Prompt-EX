@@ -3,9 +3,9 @@ from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_sche
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from .models import Message
-
 from users.models import User
+
+from .models import Message
 
 
 @extend_schema(

@@ -1,9 +1,11 @@
 import json
+
 import jwt
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.conf import settings
 from django.contrib.auth import get_user_model
+
 
 class BaseConsumer(AsyncWebsocketConsumer):
     @sync_to_async
@@ -30,6 +32,7 @@ class BaseConsumer(AsyncWebsocketConsumer):
 
         return True
 
+
 class ChatConsumer(BaseConsumer):
     async def connect(self):
         if not await self.authenticate():
@@ -48,10 +51,11 @@ class ChatConsumer(BaseConsumer):
         await self.add_user_to_room(chat_room, self.scope["user"])
         await self.channel_layer.group_add(self.room_group_id, self.channel_name)
         await self.accept()
-    
+
     @sync_to_async
     def get_room_by_id(self, room_id):
         from .models import ChatRoom
+
         # room_id를 사용하여 채팅방을 가져옵니다.
         try:
             return ChatRoom.objects.get(id=room_id)
@@ -66,12 +70,14 @@ class ChatConsumer(BaseConsumer):
     @sync_to_async
     def get_or_create_room(self, room_id):
         from .models import ChatRoom
+
         room, created = ChatRoom.objects.get_or_create(id=room_id)
         return room
 
     @sync_to_async
     def save_message(self, room_id, user, content):
         from .models import ChatRoom, Message
+
         room = ChatRoom.objects.get(id=room_id)
         Message.objects.create(user=user, room=room, content=content)
 
@@ -89,15 +95,20 @@ class ChatConsumer(BaseConsumer):
                     "type": "chat_message",
                     "message": message_content,
                     "user": self.scope["user"].email,
-                }
+                },
             )
 
     async def chat_message(self, event):
-        await self.send(text_data=json.dumps({
-            "type": "chat_message",
-            "message": event["message"],
-            "user": event["user"],
-        }))
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "type": "chat_message",
+                    "message": event["message"],
+                    "user": event["user"],
+                }
+            )
+        )
+
 
 class ChatListConsumer(BaseConsumer):
     async def connect(self):
@@ -114,10 +125,9 @@ class ChatListConsumer(BaseConsumer):
         text_data_json = json.loads(text_data)
         if text_data_json.get("type") == "get_chat_rooms":
             chat_rooms = await self.get_user_chat_rooms(self.scope["user"])
-            await self.send(text_data=json.dumps({
-                "type": "chat_rooms",
-                "data": chat_rooms
-            }))
+            await self.send(
+                text_data=json.dumps({"type": "chat_rooms", "data": chat_rooms})
+            )
 
     async def disconnect(self, close_code):
         pass
