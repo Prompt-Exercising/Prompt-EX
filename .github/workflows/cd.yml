@@ -36,7 +36,7 @@ jobs:
         chmod 600 ~/.ssh/GCP_id_rsa
 
 
-    - name: Pull latest code from main branch and Rebuild and restart Docker containers
+    - name: Pull latest code and manage Docker containers
       env:
         GCP_USER: baggiung
       run: |
@@ -44,5 +44,9 @@ jobs:
           cd /home/baggiung/Prompt-EX &&
           git pull origin main &&
           sudo docker-compose down || true &&
-          sudo docker-compose up --build -d
+          if [ \$(git diff --name-only HEAD^ HEAD Dockerfile) ]; then
+            sudo docker-compose up --build -d
+          else
+            sudo docker-compose up -d
+          fi
         "
