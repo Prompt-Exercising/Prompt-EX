@@ -49,7 +49,6 @@ class SignUpView(APIView):
             email_verification = EmailVerification.objects.create(user=user)
             current_site = get_current_site(request)
             mail_subject = "이메일 인증을 완료하세요."
-            # TODO 민수님과 얘기 나눠보기
             message_html = render_to_string(
                 "emails/activation_email.html",
                 {
