@@ -31,3 +31,7 @@ AI가 직접 맞춤 운동법을 소개해주도록 한다.
 - 유저 간 소통을 위한 커뮤니티 제작 및 redis를 이용한 채팅 시스템 구현
 - CI/CD 자동화 및 코드 관리
 - GCP 기반 웹 서바스 배포
+
+## ERD
+<img width="742" alt="스크린샷 2025-04-01 오후 4 38 27" src="https://github.com/user-attachments/assets/063ebf30-bcbf-41ee-b80a-090aae462b6c" />
+
