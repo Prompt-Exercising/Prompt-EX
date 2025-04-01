@@ -21,7 +21,7 @@ AI가 직접 맞춤 운동법을 소개해주도록 한다.
 
 ### Team
 |<img src="https://avatars.githubusercontent.com/u/164334686?v=4" width="150" height="150"/>|
-|:-:|:-:|
+|:-:|
 |[@Gomnonix](https://github.com/Gomnonix)|
 
 ## 구현 기능
