@@ -19,6 +19,11 @@ AI가 직접 맞춤 운동법을 소개해주도록 한다.
 ## 🗓프로젝트 기간
 -  **기본요구사항 : 24.12 ~ 25.01**
 
+### Team
+|<img src="https://avatars.githubusercontent.com/u/66784492?v=4" width="150" height="150"/>|<img src="https://avatars.githubusercontent.com/u/164334686?v=4" width="150" height="150"/>|
+|:-:|:-:|
+|[@Gomnonix](https://github.com/Gomnonix)|
+
 ## 구현 기능
 - 사용자의 신체 데이터를 바탕으로 ChatGPT를 활용한 맞춤 운동법 제공
 - JWT를 이용하여 안전한 회원가입 및 로그인 구현
