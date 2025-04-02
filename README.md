@@ -33,5 +33,5 @@ AI가 직접 맞춤 운동법을 소개해주도록 한다.
 - GCP 기반 웹 서바스 배포
 
 ## ERD
-<img width="742" alt="스크린샷 2025-04-01 오후 4 38 27" src="https://github.com/user-attachments/assets/063ebf30-bcbf-41ee-b80a-090aae462b6c" />
+<img width="792" alt="스크린샷 2025-04-02 오후 1 50 58" src="https://github.com/user-attachments/assets/75e26137-1ad0-497e-8a64-e00870e66ba4" />
 
