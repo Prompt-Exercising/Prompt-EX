@@ -38,3 +38,4 @@ AI가 직접 맞춤 운동법을 소개해주도록 한다.
 ## Architecture
 ![Prompt-EX drawio (1)](https://github.com/user-attachments/assets/4ab13118-ce27-4f7a-9005-aeedf271fe19)
 
+![Prompt-EX drawio (2)](https://github.com/user-attachments/assets/355e4ae8-fe63-4391-979e-ee95fa4a898c)
