@@ -36,5 +36,5 @@ AI가 직접 맞춤 운동법을 소개해주도록 한다.
 <img width="792" alt="스크린샷 2025-04-02 오후 1 50 58" src="https://github.com/user-attachments/assets/75e26137-1ad0-497e-8a64-e00870e66ba4" />
 
 ## Architecture
-![Prompt-EX drawio](https://github.com/user-attachments/assets/6d80f394-e60f-4549-9181-8e2ae7ae92b7)
+![Prompt-EX drawio (1)](https://github.com/user-attachments/assets/4ab13118-ce27-4f7a-9005-aeedf271fe19)
 
